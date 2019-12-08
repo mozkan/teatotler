@@ -1,21 +1,35 @@
 #ifndef MCU_GPIO_H
 #define MCU_GPIO_H
 
-#include "mcu/pinmux.h"
+#include <cstdint>
+
 #include "mcu/pins.h"
 
 namespace mcu {
 
 class Gpio {
  public:
-  Gpio(McuPin pin, PinMux& mux);
+  enum class ResistorMode : uint32_t {
+    kPullUp = 0,
+    kPullDown,
+    kNone,
+  };
+
+  enum class Value {
+    kLow = 0,
+    kHigh,
+  };
+
+  Gpio(McuPio pio);
   ~Gpio() = default;
   void SetDirectionToOutput();
   void SetDirectionToInput();
-  void EnablePullup();
-  void DisablePullup();
+  void SetResistorMode(ResistorMode mode);
+  Value Read();
 
  private:
+   int port_pin_;
+   int pio_offset_;
 };
 
 }  // mcu

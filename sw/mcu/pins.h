@@ -1,9 +1,11 @@
 #ifndef MCU_PINS_H
 #define MCU_PINS_H
 
+#include <cstdint>
+
 namespace mcu {
 
-enum class McuPin {
+enum class McuPio : int {
   kPIO0_0 = 0,
   kPIO0_1,
   kPIO0_2,
