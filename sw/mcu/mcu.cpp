@@ -15,7 +15,6 @@ Mcu::Mcu() {
 }
 
 void Mcu::EnablePeripheralClocks() {
-  #if 1
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_GPIO(kClockEnable);
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_SWM(kClockEnable);
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_SCT(kClockEnable);
@@ -24,7 +23,6 @@ void Mcu::EnablePeripheralClocks() {
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_IOCON(kClockEnable);
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_ACMP(kClockEnable);
   SYSCON->SYSAHBCLKCTRL |= SYSCON_SYSAHBCLKCTRL_ADC(kClockEnable);
-  #endif
 }
 
 }  // namespace mcu

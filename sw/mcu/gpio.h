@@ -10,9 +10,9 @@ namespace mcu {
 class Gpio {
  public:
   enum class ResistorMode : uint32_t {
-    kPullUp = 0,
+    kNone = 0,
     kPullDown,
-    kNone,
+    kPullUp,
   };
 
   enum class Value {
@@ -26,6 +26,8 @@ class Gpio {
   void SetDirectionToInput();
   void SetResistorMode(ResistorMode mode);
   Value Read();
+  void Set();
+  void Clear();
 
  private:
    int port_pin_;

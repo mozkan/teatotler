@@ -65,14 +65,16 @@ void Gpio::SetDirectionToInput() {
 }
 
 void Gpio::SetResistorMode(ResistorMode mode) {
+  IOCON->PIO[pio_offset_] &= ~IOCON_PIO_MODE_MASK;
+
   if (mode == ResistorMode::kPullUp) {
-    IOCON->PIO[pio_offset_] =
+    IOCON->PIO[pio_offset_] |=
         IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kPullUp));
   } else if (mode == ResistorMode::kPullDown) {
-    IOCON->PIO[pio_offset_] =
+    IOCON->PIO[pio_offset_] |=
         IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kPullDown));
   } else {
-    IOCON->PIO[pio_offset_] =
+    IOCON->PIO[pio_offset_] |=
         IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kNone));
   }
 }
@@ -83,6 +85,14 @@ Gpio::Value Gpio::Read() {
   } else {
     return Value::kLow;
   }
+}
+
+void Gpio::Set() {
+  GPIO->SET[0] = 0x1U << port_pin_;
+}
+
+void Gpio::Clear() {
+  GPIO->CLR[0] = 0x1U << port_pin_;
 }
 
 }  // mcu
