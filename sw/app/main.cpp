@@ -4,6 +4,49 @@
 #include "mcu/mcu.h"
 #include "mcu/pins.h"
 
+class BasicHBridge {
+ public:
+  BasicHBridge()
+      : gpio_h_bridge_dir_a_(mcu::McuPio::kPIO0_0),
+        gpio_h_bridge_dir_b_(mcu::McuPio::kPIO0_14),
+        gpio_h_bridge_pwm_a_(mcu::McuPio::kPIO0_16),
+        gpio_h_bridge_pwm_b_(mcu::McuPio::kPIO0_15) {
+    Stop();
+
+    gpio_h_bridge_dir_a_.SetDirectionToOutput();
+    gpio_h_bridge_dir_b_.SetDirectionToOutput();
+    gpio_h_bridge_pwm_a_.SetDirectionToOutput();
+    gpio_h_bridge_pwm_b_.SetDirectionToOutput();
+  }
+
+  ~BasicHBridge() = default;
+
+  void DriveForward() {
+    Stop();
+    gpio_h_bridge_dir_a_.Clear();
+    gpio_h_bridge_pwm_b_.Set();
+  }
+
+  void DriveReverse() {
+    Stop();
+    gpio_h_bridge_dir_b_.Clear();
+    gpio_h_bridge_pwm_a_.Set();
+  }
+
+  void Stop() {
+    gpio_h_bridge_dir_a_.Set();
+    gpio_h_bridge_dir_b_.Set();
+    gpio_h_bridge_pwm_a_.Clear();
+    gpio_h_bridge_pwm_b_.Clear();
+  }
+
+ private:
+  mcu::Gpio gpio_h_bridge_dir_a_;
+  mcu::Gpio gpio_h_bridge_dir_b_;
+  mcu::Gpio gpio_h_bridge_pwm_a_;
+  mcu::Gpio gpio_h_bridge_pwm_b_;
+};
+
 int main(void) {
   mcu::Mcu mcu;
 
@@ -51,19 +94,30 @@ int main(void) {
   gpio_led_col3.Set();
   gpio_led_col3.SetDirectionToOutput();
 
+  BasicHBridge h_bridge;
+
   volatile int i = 0;
 
   while(1) {
+    h_bridge.DriveForward();
     gpio_led_col1.Clear();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+
+    h_bridge.Stop();
     gpio_led_col1.Set();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+
+    h_bridge.DriveReverse();
     gpio_led_col2.Clear();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+
+    h_bridge.Stop();
     gpio_led_col2.Set();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    
     gpio_led_col3.Clear();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+
     gpio_led_col3.Set();
     while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
   }
