@@ -24,4 +24,26 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>app</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app</locationURI>
+		</link>
+		<link>
+			<name>mcu</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mcu</locationURI>
+		</link>
+		<link>
+			<name>system</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/system</locationURI>
+		</link>
+		<link>
+			<name>util</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/util</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
