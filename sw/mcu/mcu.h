@@ -10,6 +10,7 @@ class Mcu {
 
  private:
   void EnablePeripheralClocks();
+  void ResetPeripherals();
 };
 
 } //  namespace mcu

@@ -1,6 +1,7 @@
+#include "mcu/gpio.h"
+
 #include <array>
 
-#include "mcu/gpio.h"
 #include "mcu/lpc822.h"
 
 namespace mcu {

@@ -2,6 +2,7 @@
 
 #include "mcu/gpio.h"
 #include "mcu/mcu.h"
+#include "mcu/mrt.h"
 #include "mcu/pins.h"
 
 class BasicHBridge {
@@ -14,9 +15,13 @@ class BasicHBridge {
     Stop();
 
     gpio_h_bridge_dir_a_.SetDirectionToOutput();
+    gpio_h_bridge_dir_a_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
     gpio_h_bridge_dir_b_.SetDirectionToOutput();
+    gpio_h_bridge_dir_b_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
     gpio_h_bridge_pwm_a_.SetDirectionToOutput();
+    gpio_h_bridge_pwm_a_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
     gpio_h_bridge_pwm_b_.SetDirectionToOutput();
+    gpio_h_bridge_pwm_b_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
   }
 
   ~BasicHBridge() = default;
@@ -94,32 +99,45 @@ int main(void) {
   gpio_led_col3.Set();
   gpio_led_col3.SetDirectionToOutput();
 
-  BasicHBridge h_bridge;
+  //BasicHBridge h_bridge;
+  Mrt mrt(12000000);
 
-  volatile int i = 0;
+  //volatile int i = 0;
 
   while(1) {
-    h_bridge.DriveForward();
+    //h_bridge.DriveForward();
     gpio_led_col1.Clear();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
 
-    h_bridge.Stop();
+    //h_bridge.Stop();
     gpio_led_col1.Set();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
 
-    h_bridge.DriveReverse();
+    //h_bridge.DriveReverse();
     gpio_led_col2.Clear();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
 
-    h_bridge.Stop();
+    //h_bridge.Stop();
     gpio_led_col2.Set();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
-    
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
+
     gpio_led_col3.Clear();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
 
     gpio_led_col3.Set();
-    while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    while (!mrt.TimeoutOccurred()) {
+    }
   }
 
   return 0;

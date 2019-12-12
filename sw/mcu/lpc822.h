@@ -5221,6 +5221,7 @@ typedef struct {
  *  0b1..Clear the WKT reset.
  */
 #define SYSCON_PRESETCTRL_WKT_RST_N(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL_WKT_RST_N_SHIFT)) & SYSCON_PRESETCTRL_WKT_RST_N_MASK)
+#define SYSCON_PRESETCTRL_GPIO_RST_N_MASK        (0x400U)
 #define SYSCON_PRESETCTRL_GPIO_RST_N_SHIFT       (10U)
 /*! GPIO_RST_N - GPIO and GPIO pin interrupt reset control.
  *  0b0..Assert the GPIO reset.
