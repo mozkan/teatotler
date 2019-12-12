@@ -37,6 +37,10 @@ enum class McuPio : int {
   kPIO0_28
 };
 
+static constexpr int kMcuPioCount() {
+  return static_cast<int>(McuPio::kPIO0_28);
+}
+
 }  // mcu
 
 #endif /* MCU_PINS_H */

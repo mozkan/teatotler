@@ -4,6 +4,7 @@
 #include "mcu/mcu.h"
 #include "mcu/mrt.h"
 #include "mcu/pins.h"
+#include "util/assert.h"
 
 class BasicHBridge {
  public:
@@ -108,35 +109,35 @@ int main(void) {
     //h_bridge.DriveForward();
     gpio_led_col1.Clear();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
 
     //h_bridge.Stop();
     gpio_led_col1.Set();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
 
     //h_bridge.DriveReverse();
     gpio_led_col2.Clear();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
 
     //h_bridge.Stop();
     gpio_led_col2.Set();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
 
     gpio_led_col3.Clear();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
 
     gpio_led_col3.Set();
     //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
-    while (!mrt.TimeoutOccurred()) {
+    while (!mrt.TimerExpired()) {
     }
   }
 

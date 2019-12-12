@@ -16,9 +16,9 @@ public:
  Mrt(uint32_t period);
 
  // Returns true when the counter reaches zero. Resets on read of a successful
- // timeout (subsequent calls will return false until the counter reaches zero
- // again).
- bool TimeoutOccurred();
+ // expiration. Subsequent calls will return false until the counter expires
+ // again.
+ bool TimerExpired();
 
 private:
  int channel_;

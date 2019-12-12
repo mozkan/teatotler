@@ -16,7 +16,7 @@ Mrt::Mrt(uint32_t period) : channel_(0) {
   MRT0->CHANNEL[channel_].CTRL |= MRT_CHANNEL_CTRL_MODE(0);
 }
 
-bool Mrt::TimeoutOccurred() {
+bool Mrt::TimerExpired() {
   bool timeout_occurred = false;
 
   if (MRT0->CHANNEL[channel_].STAT & MRT_CHANNEL_STAT_INTFLAG_MASK) {

@@ -4,8 +4,7 @@ namespace util {
 
 void Assert(bool condition) {
   if (!condition) {
-    while(1) {
-    }
+    StopExecutionHere();
   }
 }
 
