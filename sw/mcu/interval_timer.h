@@ -1,0 +1,6 @@
+#ifndef MCU_INTERVAL_TIMER_H
+#define MCU_INTERVAL_TIMER_H
+
+// ...
+
+#endif /* MCU_INTERVAL_TIMER_H */

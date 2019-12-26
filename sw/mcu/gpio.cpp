@@ -65,26 +65,26 @@ void Gpio::SetDirectionToInput() {
   GPIO->DIR[0] &= ~(0x1U << port_pin_);
 }
 
-void Gpio::SetResistorMode(ResistorMode mode) {
+void Gpio::SetResistorMode(io::ResistorMode mode) {
   IOCON->PIO[pio_offset_] &= ~IOCON_PIO_MODE_MASK;
 
-  if (mode == ResistorMode::kPullUp) {
+  if (mode == io::ResistorMode::kPullUp) {
     IOCON->PIO[pio_offset_] |=
-        IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kPullUp));
-  } else if (mode == ResistorMode::kPullDown) {
+        IOCON_PIO_MODE(static_cast<uint32_t>(io::ResistorMode::kPullUp));
+  } else if (mode == io::ResistorMode::kPullDown) {
     IOCON->PIO[pio_offset_] |=
-        IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kPullDown));
+        IOCON_PIO_MODE(static_cast<uint32_t>(io::ResistorMode::kPullDown));
   } else {
     IOCON->PIO[pio_offset_] |=
-        IOCON_PIO_MODE(static_cast<uint32_t>(ResistorMode::kNone));
+        IOCON_PIO_MODE(static_cast<uint32_t>(io::ResistorMode::kNone));
   }
 }
 
-Gpio::Value Gpio::Read() {
+io::Value Gpio::Read() {
   if (GPIO->B[0][port_pin_] == kBRegisterLogicHigh) {
-    return Value::kHigh;
+    return io::Value::kHigh;
   } else {
-    return Value::kLow;
+    return io::Value::kLow;
   }
 }
 

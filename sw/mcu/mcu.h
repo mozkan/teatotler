@@ -2,8 +2,9 @@
 #define MCU_MCU_H
 
 #include <array>
-#include <bitset>
 
+#include "mcu/digital_io.h"
+#include "mcu/gpio.h"
 #include "mcu/pins.h"
 
 namespace mcu {
@@ -11,17 +12,18 @@ namespace mcu {
 class Mcu {
  public:
   Mcu();
-  ~Mcu() = default;
+  ~Mcu();
 
- //IDigitalInput* GetDigitalInput(McuPio pio);
- //IDigitalOutput* GetDigitalInput(McuPio pio);
+ io::IDigitalInput* GetDigitalInput(McuPio pio);
+ io::IDigitalOutput* GetDigitalOutput(McuPio pio);
  //IIntervalTimer* GetIntervalTimer(int channel);
 
  private:
   void EnablePeripheralClocks();
   void ResetPeripherals();
+  Gpio* CreateGpio(McuPio pio);
 
-  std::bitset<kMcuPioCount()> pios_;
+  std::array<Gpio*, kMcuPioCount()> gpios_;
 };
 
 } //  namespace mcu

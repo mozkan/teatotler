@@ -1,33 +1,21 @@
 #ifndef MCU_GPIO_H
 #define MCU_GPIO_H
 
-#include <cstdint>
-
+#include "mcu/digital_io.h"
 #include "mcu/pins.h"
 
 namespace mcu {
 
-class Gpio {
+class Gpio : public io::IDigitalInput, public io::IDigitalOutput {
  public:
-  enum class ResistorMode : uint32_t {
-    kNone = 0,
-    kPullDown,
-    kPullUp,
-  };
-
-  enum class Value {
-    kLow = 0,
-    kHigh,
-  };
-
   Gpio(McuPio pio);
-  ~Gpio() = default;
+  virtual ~Gpio() = default;
   void SetDirectionToOutput();
   void SetDirectionToInput();
-  void SetResistorMode(ResistorMode mode);
-  Value Read();
-  void Set();
-  void Clear();
+  void SetResistorMode(io::ResistorMode mode) override;
+  io::Value Read() override;
+  void Set() override;
+  void Clear() override;
 
  private:
    int port_pin_;

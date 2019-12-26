@@ -1,8 +1,6 @@
 #ifndef MCU_PINS_H
 #define MCU_PINS_H
 
-#include <cstdint>
-
 namespace mcu {
 
 enum class McuPio : int {
@@ -38,7 +36,7 @@ enum class McuPio : int {
 };
 
 static constexpr int kMcuPioCount() {
-  return static_cast<int>(McuPio::kPIO0_28);
+  return static_cast<int>(McuPio::kPIO0_28) + 1;
 }
 
 }  // mcu

@@ -1,142 +1,89 @@
 #include <cr_section_macros.h>
 
-#include "mcu/gpio.h"
 #include "mcu/mcu.h"
 #include "mcu/mrt.h"
 #include "mcu/pins.h"
-#include "util/assert.h"
+#include "system/hbridge.h"
 
-class BasicHBridge {
- public:
-  BasicHBridge()
-      : gpio_h_bridge_dir_a_(mcu::McuPio::kPIO0_9),
-        gpio_h_bridge_dir_b_(mcu::McuPio::kPIO0_8),
-        gpio_h_bridge_pwm_a_(mcu::McuPio::kPIO0_19),
-        gpio_h_bridge_pwm_b_(mcu::McuPio::kPIO0_20) {
-    Stop();
-
-    gpio_h_bridge_dir_a_.SetDirectionToOutput();
-    gpio_h_bridge_dir_a_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
-    gpio_h_bridge_dir_b_.SetDirectionToOutput();
-    gpio_h_bridge_dir_b_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
-    gpio_h_bridge_pwm_a_.SetDirectionToOutput();
-    gpio_h_bridge_pwm_a_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
-    gpio_h_bridge_pwm_b_.SetDirectionToOutput();
-    gpio_h_bridge_pwm_b_.SetResistorMode(mcu::Gpio::ResistorMode::kNone);
-  }
-
-  ~BasicHBridge() = default;
-
-  void DriveForward() {
-    Stop();
-    gpio_h_bridge_dir_a_.Clear();
-    gpio_h_bridge_pwm_b_.Set();
-  }
-
-  void DriveReverse() {
-    Stop();
-    gpio_h_bridge_dir_b_.Clear();
-    gpio_h_bridge_pwm_a_.Set();
-  }
-
-  void Stop() {
-    gpio_h_bridge_dir_a_.Set();
-    gpio_h_bridge_dir_b_.Set();
-    gpio_h_bridge_pwm_a_.Clear();
-    gpio_h_bridge_pwm_b_.Clear();
-  }
-
- private:
-  mcu::Gpio gpio_h_bridge_dir_a_;
-  mcu::Gpio gpio_h_bridge_dir_b_;
-  mcu::Gpio gpio_h_bridge_pwm_a_;
-  mcu::Gpio gpio_h_bridge_pwm_b_;
-};
+using namespace mcu;
 
 int main(void) {
-  mcu::Mcu mcu;
+  Mcu mcu;
 
-  mcu::Gpio gpio_btn_debug(mcu::McuPio::kPIO0_10);
-  gpio_btn_debug.SetDirectionToInput();
-  gpio_btn_debug.SetResistorMode(mcu::Gpio::ResistorMode::kPullUp);
+  io::IDigitalInput* debug_btn = mcu.GetDigitalInput(McuPio::kPIO0_10);
+  debug_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
-  mcu::Gpio gpio_btn_start(mcu::McuPio::kPIO0_4);
-  gpio_btn_start.SetDirectionToInput();
-  gpio_btn_start.SetResistorMode(mcu::Gpio::ResistorMode::kPullUp);
+  io::IDigitalInput* start_btn = mcu.GetDigitalInput(McuPio::kPIO0_4);
+  start_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
-  mcu::Gpio gpio_btn_reset(mcu::McuPio::kPIO0_11);
-  gpio_btn_reset.SetDirectionToInput();
-  gpio_btn_reset.SetResistorMode(mcu::Gpio::ResistorMode::kPullUp);
+  io::IDigitalInput* reset_btn = mcu.GetDigitalInput(McuPio::kPIO0_11);
+  reset_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
-  mcu::Gpio gpio_btn_raise(mcu::McuPio::kPIO0_6);
-  gpio_btn_raise.SetDirectionToInput();
-  gpio_btn_raise.SetResistorMode(mcu::Gpio::ResistorMode::kPullUp);
+  io::IDigitalInput* raise_btn = mcu.GetDigitalInput(McuPio::kPIO0_6);
+  raise_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
-  mcu::Gpio gpio_btn_lower(mcu::McuPio::kPIO0_23);
-  gpio_btn_lower.SetDirectionToInput();
-  gpio_btn_lower.SetResistorMode(mcu::Gpio::ResistorMode::kPullUp);
+  io::IDigitalInput* lower_btn = mcu.GetDigitalInput(McuPio::kPIO0_23);
+  lower_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
-  mcu::Gpio gpio_led_row1(mcu::McuPio::kPIO0_25);
-  gpio_led_row1.Set();
-  gpio_led_row1.SetDirectionToOutput();
+  io::IDigitalOutput* led_row1 = mcu.GetDigitalOutput(McuPio::kPIO0_25);
+  led_row1->Set();
 
-  mcu::Gpio gpio_led_row2(mcu::McuPio::kPIO0_1);
-  gpio_led_row2.Set();
-  gpio_led_row2.SetDirectionToOutput();
+  io::IDigitalOutput* led_row2 = mcu.GetDigitalOutput(McuPio::kPIO0_1);
+  led_row2->Set();
 
-  mcu::Gpio gpio_led_row3(mcu::McuPio::kPIO0_26);
-  gpio_led_row3.Set();
-  gpio_led_row3.SetDirectionToOutput();
+  io::IDigitalOutput* led_row3 = mcu.GetDigitalOutput(McuPio::kPIO0_26);
+  led_row3->Set();
 
-  mcu::Gpio gpio_led_col1(mcu::McuPio::kPIO0_27);
-  gpio_led_col1.Set();
-  gpio_led_col1.SetDirectionToOutput();
+  io::IDigitalOutput* led_col1 = mcu.GetDigitalOutput(McuPio::kPIO0_27);
+  led_col1->Set();
 
-  mcu::Gpio gpio_led_col2(mcu::McuPio::kPIO0_15);
-  gpio_led_col2.Set();
-  gpio_led_col2.SetDirectionToOutput();
+  io::IDigitalOutput* led_col2 = mcu.GetDigitalOutput(McuPio::kPIO0_15);
+  led_col2->Set();
 
-  mcu::Gpio gpio_led_col3(mcu::McuPio::kPIO0_24);
-  gpio_led_col3.Set();
-  gpio_led_col3.SetDirectionToOutput();
+  io::IDigitalOutput* led_col3 = mcu.GetDigitalOutput(McuPio::kPIO0_24);
+  led_col3->Set();
 
-  //BasicHBridge h_bridge;
+  BasicHBridge h_bridge(mcu.GetDigitalOutput(McuPio::kPIO0_9),
+                        mcu.GetDigitalOutput(McuPio::kPIO0_8),
+                        mcu.GetDigitalOutput(McuPio::kPIO0_19),
+                        mcu.GetDigitalOutput(McuPio::kPIO0_20));
+
   Mrt mrt(12000000);
 
   //volatile int i = 0;
 
   while(1) {
-    //h_bridge.DriveForward();
-    gpio_led_col1.Clear();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    h_bridge.DriveForward();
+    led_col1->Clear();
+    //while (lower_btn.Read() != io::Value::kLow) { i++; }
     while (!mrt.TimerExpired()) {
     }
 
-    //h_bridge.Stop();
-    gpio_led_col1.Set();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    h_bridge.Stop();
+    led_col1->Set();
+    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
     while (!mrt.TimerExpired()) {
     }
 
-    //h_bridge.DriveReverse();
-    gpio_led_col2.Clear();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    h_bridge.DriveReverse();
+    led_col2->Clear();
+    //while (lower_btn.Read() != io::Value::kLow) { i++; }
     while (!mrt.TimerExpired()) {
     }
 
-    //h_bridge.Stop();
-    gpio_led_col2.Set();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    h_bridge.Stop();
+    led_col2->Set();
+    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
     while (!mrt.TimerExpired()) {
     }
 
-    gpio_led_col3.Clear();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kLow) { i++; }
+    led_col3->Clear();
+    //while (lower_btn.Read() != io::Value::kLow) { i++; }
     while (!mrt.TimerExpired()) {
     }
 
-    gpio_led_col3.Set();
-    //while (gpio_btn_lower.Read() != mcu::Gpio::Value::kHigh) { i++; }
+    led_col3->Set();
+    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
     while (!mrt.TimerExpired()) {
     }
   }
