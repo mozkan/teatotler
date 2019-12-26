@@ -18,6 +18,10 @@ Mcu::Mcu() {
     gpio = nullptr;
   }
 
+  for (auto& channel : mrt_channels_) {
+    channel = nullptr;
+  }
+
   EnablePeripheralClocks();
   ResetPeripherals();
 }
@@ -26,6 +30,12 @@ Mcu::~Mcu() {
   for (auto& gpio : gpios_) {
     if (gpio != nullptr) {
       delete gpio;
+    }
+  }
+
+  for (auto& channel : mrt_channels_) {
+    if (channel != nullptr) {
+      delete channel;
     }
   }
 }
@@ -43,6 +53,19 @@ io::IDigitalOutput* Mcu::GetDigitalOutput(McuPio pio) {
   gpio->SetResistorMode(io::ResistorMode::kNone);
 
   return gpio;
+}
+
+IIntervalTimer* Mcu::GetIntervalTimer(int channel, uint32_t period_ticks) {
+  // Multiple channels not supported right now.
+  util::Assert(channel == 0);
+
+  mrt_channels_[0] = new Mrt(period_ticks);
+
+  return mrt_channels_[0];
+}
+
+uint32_t Mcu::SystemClockHz() {
+  return 12U * 1000U * 1000U;
 }
 
 void Mcu::EnablePeripheralClocks() {

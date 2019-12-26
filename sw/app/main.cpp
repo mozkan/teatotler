@@ -1,7 +1,7 @@
 #include <cr_section_macros.h>
 
+#include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
-#include "mcu/mrt.h"
 #include "mcu/pins.h"
 #include "system/hbridge.h"
 
@@ -48,43 +48,42 @@ int main(void) {
                         mcu.GetDigitalOutput(McuPio::kPIO0_19),
                         mcu.GetDigitalOutput(McuPio::kPIO0_20));
 
-  Mrt mrt(12000000);
-
+  IIntervalTimer* timer = mcu.GetIntervalTimer(0, Mcu::SystemClockHz());
   //volatile int i = 0;
 
   while(1) {
-    h_bridge.DriveForward();
+    //h_bridge.DriveForward();
     led_col1->Clear();
-    //while (lower_btn.Read() != io::Value::kLow) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kLow) { i++; }
+    while (!timer->TimerExpired()) {
     }
 
-    h_bridge.Stop();
+    //h_bridge.Stop();
     led_col1->Set();
-    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
+    while (!timer->TimerExpired()) {
     }
 
-    h_bridge.DriveReverse();
+    //h_bridge.DriveReverse();
     led_col2->Clear();
-    //while (lower_btn.Read() != io::Value::kLow) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kLow) { i++; }
+    while (!timer->TimerExpired()) {
     }
 
-    h_bridge.Stop();
+    //h_bridge.Stop();
     led_col2->Set();
-    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
+    while (!timer->TimerExpired()) {
     }
 
     led_col3->Clear();
-    //while (lower_btn.Read() != io::Value::kLow) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kLow) { i++; }
+    while (!timer->TimerExpired()) {
     }
 
     led_col3->Set();
-    //while (lower_btn.Read() != io::Value::kHigh) { i++; }
-    while (!mrt.TimerExpired()) {
+    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
+    while (!timer->TimerExpired()) {
     }
   }
 

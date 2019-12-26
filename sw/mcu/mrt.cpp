@@ -2,6 +2,8 @@
 
 #include "mcu/lpc822.h"
 
+namespace mcu {
+
 // Only use channel 0 in this implementation.
 Mrt::Mrt(uint32_t period) : channel_(0) {
   // Loads period into the INTVAL:IVALUE counter. Forces the load to take effect
@@ -26,3 +28,5 @@ bool Mrt::TimerExpired() {
 
   return timeout_occurred;
 }
+
+}  // namespace mcu
