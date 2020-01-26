@@ -1,5 +1,7 @@
 #include "system/hbridge.h"
 
+namespace sys {
+
 BasicHBridge::BasicHBridge(
   mcu::io::IDigitalOutput* dir_a, mcu::io::IDigitalOutput* dir_b,
   mcu::io::IDigitalOutput* pwm_a, mcu::io::IDigitalOutput* pwm_b)
@@ -25,3 +27,5 @@ void BasicHBridge::Stop() {
   pwm_a_->Clear();
   pwm_b_->Clear();
 }
+
+}  // namespace sys

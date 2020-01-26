@@ -3,6 +3,7 @@
 #include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
 #include "mcu/pins.h"
+#include "system/display.h"
 #include "system/hbridge.h"
 
 using namespace mcu;
@@ -10,6 +11,7 @@ using namespace mcu;
 int main(void) {
   Mcu mcu;
 
+#if 0
   io::IDigitalInput* debug_btn = mcu.GetDigitalInput(McuPio::kPIO0_10);
   debug_btn->SetResistorMode(io::ResistorMode::kPullUp);
 
@@ -24,32 +26,52 @@ int main(void) {
 
   io::IDigitalInput* lower_btn = mcu.GetDigitalInput(McuPio::kPIO0_23);
   lower_btn->SetResistorMode(io::ResistorMode::kPullUp);
+#endif
 
-  io::IDigitalOutput* led_row1 = mcu.GetDigitalOutput(McuPio::kPIO0_25);
-  led_row1->Set();
+#if 0
+  sys::BasicHBridge h_bridge(mcu.GetDigitalOutput(McuPio::kPIO0_9),
+                             mcu.GetDigitalOutput(McuPio::kPIO0_8),
+                             mcu.GetDigitalOutput(McuPio::kPIO0_19),
+                             mcu.GetDigitalOutput(McuPio::kPIO0_20));
+#endif
 
-  io::IDigitalOutput* led_row2 = mcu.GetDigitalOutput(McuPio::kPIO0_1);
-  led_row2->Set();
+#if 1
+  IIntervalTimer* timer = mcu.GetIntervalTimer(0, Mcu::SystemClockHz() / 1000);
+  sys::LinearDisplay display(1,
+                             {{ mcu.GetDigitalOutput(McuPio::kPIO0_25),
+                                mcu.GetDigitalOutput(McuPio::kPIO0_1),
+                                mcu.GetDigitalOutput(McuPio::kPIO0_26) }},
+                             {{ mcu.GetDigitalOutput(McuPio::kPIO0_24),
+                                mcu.GetDigitalOutput(McuPio::kPIO0_15),
+                                mcu.GetDigitalOutput(McuPio::kPIO0_27) }});
+  uint32_t time = 0;
+  uint8_t swap_pixels = 0;
 
-  io::IDigitalOutput* led_row3 = mcu.GetDigitalOutput(McuPio::kPIO0_26);
-  led_row3->Set();
+  while (1) {
+    while (!timer->TimerExpired()) {
+    }
+    time++;
 
-  io::IDigitalOutput* led_col1 = mcu.GetDigitalOutput(McuPio::kPIO0_27);
-  led_col1->Set();
+    if ((time % 1000) == 0) {
+      if (swap_pixels & 0x01) {
+        display.Update({{ true, false, true,
+                          false, true, false,
+                          true, false, true }});
+      } else {
+        display.Update({{ false, true, false,
+                          true, false, true,
+                          false, true, false }});
+      }
 
-  io::IDigitalOutput* led_col2 = mcu.GetDigitalOutput(McuPio::kPIO0_15);
-  led_col2->Set();
+      swap_pixels++;
+    }
 
-  io::IDigitalOutput* led_col3 = mcu.GetDigitalOutput(McuPio::kPIO0_24);
-  led_col3->Set();
+    display.Run(time);
+  }
+#endif
 
-  BasicHBridge h_bridge(mcu.GetDigitalOutput(McuPio::kPIO0_9),
-                        mcu.GetDigitalOutput(McuPio::kPIO0_8),
-                        mcu.GetDigitalOutput(McuPio::kPIO0_19),
-                        mcu.GetDigitalOutput(McuPio::kPIO0_20));
-
+#if 0
   IIntervalTimer* timer = mcu.GetIntervalTimer(0, Mcu::SystemClockHz());
-  //volatile int i = 0;
 
   while(1) {
     //h_bridge.DriveForward();
@@ -86,6 +108,6 @@ int main(void) {
     while (!timer->TimerExpired()) {
     }
   }
-
+#endif
   return 0;
 }
