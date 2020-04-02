@@ -5,11 +5,12 @@
 #include "mcu/pins.h"
 #include "system/display.h"
 #include "system/hbridge.h"
+#include "system/teatotler.h"
 
 using namespace mcu;
 
 int main(void) {
-  Mcu mcu;
+  sys::Teatotler teatotler;
 
 #if 0
   io::IDigitalInput* debug_btn = mcu.GetDigitalInput(McuPio::kPIO0_10);
@@ -28,80 +29,34 @@ int main(void) {
   lower_btn->SetResistorMode(io::ResistorMode::kPullUp);
 #endif
 
-#if 0
-  sys::BasicHBridge h_bridge(mcu.GetDigitalOutput(McuPio::kPIO0_9),
-                             mcu.GetDigitalOutput(McuPio::kPIO0_8),
-                             mcu.GetDigitalOutput(McuPio::kPIO0_19),
-                             mcu.GetDigitalOutput(McuPio::kPIO0_20));
-#endif
+  sys::LinearDisplay* display = teatotler.GetDisplay();
 
-#if 1
-  IIntervalTimer* timer = mcu.GetIntervalTimer(0, Mcu::SystemClockHz() / 1000);
-  sys::LinearDisplay display(1,
-                             {{ mcu.GetDigitalOutput(McuPio::kPIO0_25),
-                                mcu.GetDigitalOutput(McuPio::kPIO0_1),
-                                mcu.GetDigitalOutput(McuPio::kPIO0_26) }},
-                             {{ mcu.GetDigitalOutput(McuPio::kPIO0_24),
-                                mcu.GetDigitalOutput(McuPio::kPIO0_15),
-                                mcu.GetDigitalOutput(McuPio::kPIO0_27) }});
   uint32_t time = 0;
   uint8_t swap_pixels = 0;
 
   while (1) {
-    while (!timer->TimerExpired()) {
-    }
+    bool expired;
+    teatotler.WaitUntilNextTick(&expired);
+    (void)expired; // Temporary.
+
     time++;
 
     if ((time % 1000) == 0) {
       if (swap_pixels & 0x01) {
-        display.Update({{ true, false, true,
-                          false, true, false,
-                          true, false, true }});
+        display->Update({{ true, false, true,
+                           false, true, false,
+                           true, false, true }});
       } else {
-        display.Update({{ false, true, false,
-                          true, false, true,
-                          false, true, false }});
+        display->Update({{ false, true, false,
+                           true, false, true,
+                           false, true, false }});
       }
 
       swap_pixels++;
     }
 
-    display.Run(time);
+    teatotler.RunDrivers(time);
   }
-#endif
 
-#if 0
-  IIntervalTimer* timer = mcu.GetIntervalTimer(0, Mcu::SystemClockHz());
-
-  while(1) {
-    //h_bridge.DriveForward();
-    //while (lower_btn->Read() != io::Value::kLow) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-
-    //h_bridge.Stop();
-    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-
-    //h_bridge.DriveReverse();
-    //while (lower_btn->Read() != io::Value::kLow) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-
-    //h_bridge.Stop();
-    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-
-    //while (lower_btn->Read() != io::Value::kLow) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-
-    //while (lower_btn->Read() != io::Value::kHigh) { i++; }
-    while (!timer->TimerExpired()) {
-    }
-  }
-#endif
   return 0;
 }
