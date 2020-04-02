@@ -1,11 +1,11 @@
-#include "system/managed_driver.h"
+#include "util/periodic_task.h"
 
-namespace sys {
+namespace util {
 
-ManagedDriver::ManagedDriver(uint32_t run_period)
+PeriodicTask::PeriodicTask(uint32_t run_period)
     : kRunPeriodMs(run_period), last_run_time_ms_(0) {}
 
-void ManagedDriver::Run(uint32_t time_ms) {
+void PeriodicTask::Run(uint32_t time_ms) {
   if ((time_ms - last_run_time_ms_) < kRunPeriodMs) {
     return;
   }
@@ -18,4 +18,4 @@ void ManagedDriver::Run(uint32_t time_ms) {
   DoRunIteration(time_ms);
 }
 
-}  // namespace sys
+}  // namespace util

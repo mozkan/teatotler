@@ -6,12 +6,11 @@
 #include <array>
 
 #include "mcu/digital_io.h"
-
-#include "system/managed_driver.h"
+#include "util/periodic_task.h"
 
 namespace sys {
 
-class LinearDisplay : public ManagedDriver {
+class LinearDisplay : public util::PeriodicTask {
  public:
   static constexpr int kRows = 3;
   static constexpr int kColumns = 3;

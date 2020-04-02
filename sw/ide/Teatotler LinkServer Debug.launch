@@ -8,7 +8,7 @@
 <stringAttribute key="com.crt.ctrlcenter.currentWireType" value="SWD"/>
 <booleanAttribute key="com.crt.ctrlcenter.mainBreakIsHardware" value="true"/>
 <booleanAttribute key="com.crt.ctrlcenter.saveState" value="true"/>
-<stringAttribute key="com.crt.ctrlcenter.serialNumber" value="LinkServerNXP SemiconductorsLPC-LINK2 CMSIS-DAP V5.224JQD4J1MT"/>
+<stringAttribute key="com.crt.ctrlcenter.serialNumber" value="LinkServerNXP SemiconductorsLPC-LINK2 CMSIS-DAP V5.361JQD4J1MT"/>
 <mapAttribute key="com.crt.ctrlcenter.symbolsGroupSettings"/>
 <intAttribute key="com.crt.ctrlcenter.version" value="6"/>
 <stringAttribute key="com.nxp.mcuxpresso.flash.base.address" value="0x0"/>
@@ -19,12 +19,14 @@
 <stringAttribute key="com.nxp.mcuxpresso.flash.program.action" value="Program"/>
 <booleanAttribute key="com.nxp.mcuxpresso.flash.reset.target" value="true"/>
 <stringAttribute key="com.nxp.mcuxpresso.ide.probe.manufacturer" value="NXP Semiconductors"/>
-<stringAttribute key="com.nxp.mcuxpresso.ide.probe.name" value="LPC-LINK2 CMSIS-DAP V5.224"/>
+<stringAttribute key="com.nxp.mcuxpresso.ide.probe.name" value="LPC-LINK2 CMSIS-DAP V5.361"/>
 <stringAttribute key="com.nxp.mcuxpresso.ide.probe.type" value="LinkServer"/>
 <stringAttribute key="debug.level" value="2"/>
 <stringAttribute key="emu.speed" value=""/>
 <stringAttribute key="flash.driver.reset" value=""/>
+<booleanAttribute key="internal.cache" value="false"/>
 <stringAttribute key="internal.connect.script" value=""/>
+<stringAttribute key="internal.core.index" value=""/>
 <booleanAttribute key="internal.has_swo" value="false"/>
 <stringAttribute key="internal.prelaunch.command" value=""/>
 <stringAttribute key="internal.reset.script" value=""/>
@@ -41,11 +43,11 @@
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doReset" value="false"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value=""/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value=""/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="set non-stop on&#10;set pagination off&#10;set mi-async&#10;&#10;set remotetimeout 60000&#10;##target_extended_remote##&#10;set mem inaccessible-by-default ${mem.access}&#10;mon ondisconnect ${ondisconnect}&#10;set arm force-mode thumb&#10;${load}&#10;&#9;"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="set non-stop on&#13;&#10;set pagination off&#13;&#10;set mi-async&#13;&#10;&#13;&#10;set remotetimeout 60000&#13;&#10;##target_extended_remote##&#13;&#10;set mem inaccessible-by-default ${mem.access}&#13;&#10;mon ondisconnect ${ondisconnect}&#13;&#10;set arm force-mode thumb&#13;&#10;${load}&#13;&#10;&#9;"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="true"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols" value="true"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.pcRegister" value=""/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.runCommands" value="&#10;${run}&#10;&#9;"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.runCommands" value="&#13;&#10;${run}&#13;&#10;&#9;"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setResume" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="true"/>
@@ -84,6 +86,8 @@
 </mapAttribute>
 <stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;/&gt;&#13;&#10;"/>
 <stringAttribute key="process_factory_id" value="com.crt.dsfdebug.dsf.override.CRTProcessFactory"/>
+<booleanAttribute key="redlink.disable.preconnect.script" value="false"/>
+<booleanAttribute key="redlink.enable.flashhashing" value="true"/>
 <booleanAttribute key="redlink.enable.rangestepping" value="true"/>
 <stringAttribute key="run" value="cont"/>
 <booleanAttribute key="vector.catch" value="true"/>

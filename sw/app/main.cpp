@@ -75,35 +75,29 @@ int main(void) {
 
   while(1) {
     //h_bridge.DriveForward();
-    led_col1->Clear();
     //while (lower_btn->Read() != io::Value::kLow) { i++; }
     while (!timer->TimerExpired()) {
     }
 
     //h_bridge.Stop();
-    led_col1->Set();
     //while (lower_btn->Read() != io::Value::kHigh) { i++; }
     while (!timer->TimerExpired()) {
     }
 
     //h_bridge.DriveReverse();
-    led_col2->Clear();
     //while (lower_btn->Read() != io::Value::kLow) { i++; }
     while (!timer->TimerExpired()) {
     }
 
     //h_bridge.Stop();
-    led_col2->Set();
     //while (lower_btn->Read() != io::Value::kHigh) { i++; }
     while (!timer->TimerExpired()) {
     }
 
-    led_col3->Clear();
     //while (lower_btn->Read() != io::Value::kLow) { i++; }
     while (!timer->TimerExpired()) {
     }
 
-    led_col3->Set();
     //while (lower_btn->Read() != io::Value::kHigh) { i++; }
     while (!timer->TimerExpired()) {
     }

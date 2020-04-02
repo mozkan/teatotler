@@ -9,7 +9,7 @@ LinearDisplay::LinearDisplay(
     uint32_t run_interval,
     std::array<mcu::io::IDigitalOutput*, kRows> rows,
     std::array<mcu::io::IDigitalOutput*, kColumns> columns)
-    : ManagedDriver(run_interval),
+    : PeriodicTask(run_interval),
       rows_(rows), columns_(columns), active_column_(0), last_update_ms_(0) {
   ClearRows();
 
