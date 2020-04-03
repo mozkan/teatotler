@@ -1,5 +1,7 @@
 #include <cr_section_macros.h>
 
+#include <array>
+
 #include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
 #include "mcu/pins.h"
@@ -30,31 +32,39 @@ int main(void) {
 #endif
 
   sys::LinearDisplay* display = teatotler.GetDisplay();
+  std::array<bool, 9> pixels;
+
+  sys::BasicHBridge* hbridge = teatotler.GetHBridge();
+  hbridge->DriveForward();
 
   uint32_t time = 0;
-  uint8_t swap_pixels = 0;
-
+  int i = 0;
   while (1) {
     bool expired;
     teatotler.WaitUntilNextTick(&expired);
     (void)expired; // Temporary.
 
     time++;
-
+#if 0
     if ((time % 1000) == 0) {
-      if (swap_pixels & 0x01) {
-        display->Update({{ true, false, true,
-                           false, true, false,
-                           true, false, true }});
+      pixels[i] = true;
+      display->Update(pixels);
+
+      if ((i % 2) == 0) {
+        hbridge->DriveForward();
       } else {
-        display->Update({{ false, true, false,
-                           true, false, true,
-                           false, true, false }});
+        hbridge->DriveReverse();
       }
 
-      swap_pixels++;
+      i++;
+      if (i == 9) {
+        for (auto& pixel : pixels) {
+          pixel = false;
+        }
+        i = 0;
+      }
     }
-
+#endif
     teatotler.RunDrivers(time);
   }
 

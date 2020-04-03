@@ -18,7 +18,22 @@ class BasicHBridge : public util::PeriodicTask {
   void Stop();
 
  private:
+  enum class RunState {
+    kForward,
+    kReverse,
+    kDeadBand,
+    kStopped,
+  };
+
   void DoRunIteration(uint32_t time_ms) override;
+  void SetForwardOutputs();
+  void SetReverseOutputs();
+  void SetStopOutputs();
+
+  RunState current_run_state_;
+  RunState next_run_state_;
+
+  uint32_t deadband_start_ms_;
 
   mcu::io::IDigitalOutput* dir_a_;
   mcu::io::IDigitalOutput* dir_b_;
