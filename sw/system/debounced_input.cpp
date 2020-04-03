@@ -2,7 +2,13 @@
 
 namespace sys {
 
-constexpr uint32_t DebouncedInput::kDebounceIntervalMs;
+namespace {
+
+// The amount of time in milliseconds that the pin has to stay at the same
+// state in order for the debounced state to change to that state.
+constexpr uint32_t kDebounceIntervalMs = 20;
+
+}  // namespace
 
 DebouncedInput::DebouncedInput(mcu::io::IDigitalInput* input_pin)
     : input_pin_(input_pin), current_state_(mcu::io::Value::kHigh),

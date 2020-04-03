@@ -22,10 +22,6 @@ class DebouncedInput {
   mcu::io::Value GetValue();
 
  private:
-  // The amount of time in milliseconds that the pin has to stay at the same
-  // state in order for the debounced state to change to that state.
-  static constexpr uint32_t kDebounceIntervalMs = 10;
-
   mcu::io::IDigitalInput* input_pin_;
   mcu::io::Value current_state_;
   mcu::io::Value last_read_;

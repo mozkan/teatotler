@@ -20,11 +20,16 @@ class Teatotler {
 
   void WaitUntilNextTick(bool* deadline_missed);
   void RunDrivers(uint32_t time_ms);
-  
+
   BasicHBridge* GetHBridge();
   LinearDisplay* GetDisplay();
   // PanelButtons* GetPanelButtons();
   // RotaryKnob* GetRotaryKnob();
+  //DEBUG
+  mcu::io::IDigitalInput* GetInput(mcu::McuPio input) {
+    return mcu_.GetDigitalInput(input);
+  }
+  //END DEBUG
 
  private:
   mcu::Mcu mcu_;
