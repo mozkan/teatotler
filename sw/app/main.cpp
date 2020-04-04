@@ -6,9 +6,9 @@
 #include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
 #include "mcu/pins.h"
-#include "system/debounced_input.h"
 #include "system/display.h"
 #include "system/hbridge.h"
+#include "system/panel_buttons.h"
 #include "system/teatotler.h"
 
 using namespace mcu;
@@ -16,7 +16,7 @@ using namespace mcu;
 int main(void) {
   sys::Teatotler teatotler;
 
-#if 1
+#if 0
   io::IDigitalInput* start_btn_input = teatotler.GetInput(McuPio::kPIO0_4);
   //start_btn_input->SetResistorMode(io::ResistorMode::kPullUp);
 
@@ -31,16 +31,13 @@ int main(void) {
 #endif
 
   sys::LinearDisplay* display = teatotler.GetDisplay();
-  std::array<bool, 9> pixels;
-
   //sys::BasicHBridge* hbridge = teatotler.GetHBridge();
-  sys::DebouncedInput start_button(start_btn_input);
-  sys::DebouncedInput reset_button(reset_btn_input);
-  sys::DebouncedInput raise_button(raise_btn_input);
-  sys::DebouncedInput lower_button(lower_btn_input);
+  sys::PanelButtons* panel = teatotler.GetPanelButtons();
 
+  std::array<bool, 9> pixels = {false};
   uint32_t time = 0;
   //int i = 0;
+
   while (1) {
     bool expired;
     teatotler.WaitUntilNextTick(&expired);
@@ -48,32 +45,22 @@ int main(void) {
 
     time++;
 
-    start_button.Sample(time);
-    reset_button.Sample(time);
-    raise_button.Sample(time);
-    lower_button.Sample(time);
-
-    if (start_button.GetValue() == mcu::io::Value::kLow) {
+    if (panel->CheckPressedButton() ==
+        sys::PanelButtons::Button::kStart) {
       pixels[0] = true;
-    } else {
-      pixels[0] = false;
-    }
-
-    if (reset_button.GetValue() == mcu::io::Value::kLow) {
+    } else if (panel->CheckPressedButton() ==
+               sys::PanelButtons::Button::kReset) {
       pixels[1] = true;
-    } else {
-      pixels[1] = false;
-    }
-
-    if (raise_button.GetValue() == mcu::io::Value::kLow) {
+    } else if (panel->CheckPressedButton() ==
+               sys::PanelButtons::Button::kRaise) {
       pixels[2] = true;
-    } else {
-      pixels[2] = false;
-    }
-
-    if (lower_button.GetValue() == mcu::io::Value::kLow) {
+    } else if (panel->CheckPressedButton() ==
+               sys::PanelButtons::Button::kLower) {
       pixels[3] = true;
     } else {
+      pixels[0] = false;
+      pixels[1] = false;
+      pixels[2] = false;
       pixels[3] = false;
     }
 
@@ -99,6 +86,7 @@ int main(void) {
       }
     }
 #endif
+
     teatotler.RunDrivers(time);
   }
 

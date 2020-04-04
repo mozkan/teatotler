@@ -6,8 +6,9 @@ namespace sys {
 
 namespace {
 
-constexpr int kDisplayUpdatePeriodMs = 1;
-constexpr int kHBridgeUpdatePeriodMs = 10;
+constexpr uint32_t kDisplayUpdatePeriodMs = 1;
+constexpr uint32_t kHBridgeUpdatePeriodMs = 10;
+constexpr uint32_t kPanelButtonsUpdatePeriodMs = 5;
 
 }  // namespace
 
@@ -26,7 +27,12 @@ Teatotler::Teatotler()
                {{ mcu_.GetDigitalOutput(mcu::McuPio::kPIO0_24),
                   mcu_.GetDigitalOutput(mcu::McuPio::kPIO0_15),
                   mcu_.GetDigitalOutput(mcu::McuPio::kPIO0_27) }}),
-      driver_tasks_{{ &h_bridge_, &display_ }} {}
+      panel_buttons_(kPanelButtonsUpdatePeriodMs,
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_4),
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_11),
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_6),
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_23)),
+      driver_tasks_{{ &h_bridge_, &display_, &panel_buttons_ }} {}
 
 void Teatotler::WaitUntilNextTick(bool* deadline_missed) {
   if (timer_->TimerExpired()) {
@@ -49,6 +55,10 @@ BasicHBridge* Teatotler::GetHBridge() {
 
 LinearDisplay* Teatotler::GetDisplay() {
   return &display_;
+}
+
+PanelButtons* Teatotler::GetPanelButtons() {
+  return &panel_buttons_;
 }
 
 void Teatotler::RunDrivers(uint32_t time_ms) {
