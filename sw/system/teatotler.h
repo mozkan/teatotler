@@ -10,6 +10,7 @@
 #include "system/hbridge.h"
 #include "system/display.h"
 #include "system/panel_buttons.h"
+#include "system/rotary_switch.h"
 #include "util/periodic_task.h"
 
 namespace sys {
@@ -25,7 +26,7 @@ class Teatotler {
   BasicHBridge* GetHBridge();
   LinearDisplay* GetDisplay();
   PanelButtons* GetPanelButtons();
-  // RotaryKnob* GetRotaryKnob();
+  RotarySwitch* GetRotarySwitch();
 
  private:
   mcu::Mcu mcu_;
@@ -34,9 +35,9 @@ class Teatotler {
   BasicHBridge h_bridge_;
   LinearDisplay display_;
   PanelButtons panel_buttons_;
-  // RotaryKnob rotary_knob_;
+  RotarySwitch rotary_switch_;
 
-  std::array<util::PeriodicTask*, 3> driver_tasks_;
+  std::array<util::PeriodicTask*, 4> driver_tasks_;
 };
 
 }  // namespace sys

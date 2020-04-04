@@ -9,6 +9,7 @@ namespace {
 constexpr uint32_t kDisplayUpdatePeriodMs = 1;
 constexpr uint32_t kHBridgeUpdatePeriodMs = 10;
 constexpr uint32_t kPanelButtonsUpdatePeriodMs = 5;
+constexpr uint32_t kRotarySwitchUpdatePeriodMs = 5;
 
 }  // namespace
 
@@ -32,7 +33,11 @@ Teatotler::Teatotler()
                      mcu_.GetDigitalInput(mcu::McuPio::kPIO0_11),
                      mcu_.GetDigitalInput(mcu::McuPio::kPIO0_6),
                      mcu_.GetDigitalInput(mcu::McuPio::kPIO0_23)),
-      driver_tasks_{{ &h_bridge_, &display_, &panel_buttons_ }} {}
+      rotary_switch_(kRotarySwitchUpdatePeriodMs,
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_0),
+                     mcu_.GetDigitalInput(mcu::McuPio::kPIO0_14)),
+      driver_tasks_{{ &h_bridge_, &display_, &panel_buttons_,
+                      &rotary_switch_ }} {}
 
 void Teatotler::WaitUntilNextTick(bool* deadline_missed) {
   if (timer_->TimerExpired()) {
@@ -59,6 +64,10 @@ LinearDisplay* Teatotler::GetDisplay() {
 
 PanelButtons* Teatotler::GetPanelButtons() {
   return &panel_buttons_;
+}
+
+RotarySwitch* Teatotler::GetRotarySwitch() {
+  return &rotary_switch_;
 }
 
 void Teatotler::RunDrivers(uint32_t time_ms) {

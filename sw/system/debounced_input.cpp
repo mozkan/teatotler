@@ -6,7 +6,7 @@ namespace {
 
 // The amount of time in milliseconds that the pin has to stay at the same
 // state in order for the debounced state to change to that state.
-constexpr uint32_t kDebounceIntervalMs = 20;
+constexpr uint32_t kDebounceIntervalMs = 10;
 
 }  // namespace
 

@@ -12,7 +12,7 @@ namespace sys {
 class DebouncedInput {
  public:
   DebouncedInput(mcu::io::IDigitalInput* input_pin);
-  ~DebouncedInput() = default;
+  virtual ~DebouncedInput() = default;
 
   // Samples the pin and determines the current debounced state. Takes wall
   // clock time as time_ms.

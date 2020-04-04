@@ -6,9 +6,11 @@
 #include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
 #include "mcu/pins.h"
+#include "system/debounced_input.h"
 #include "system/display.h"
 #include "system/hbridge.h"
 #include "system/panel_buttons.h"
+#include "system/rotary_switch.h"
 #include "system/teatotler.h"
 
 using namespace mcu;
@@ -16,27 +18,15 @@ using namespace mcu;
 int main(void) {
   sys::Teatotler teatotler;
 
-#if 0
-  io::IDigitalInput* start_btn_input = teatotler.GetInput(McuPio::kPIO0_4);
-  //start_btn_input->SetResistorMode(io::ResistorMode::kPullUp);
-
-  io::IDigitalInput* reset_btn_input = teatotler.GetInput(McuPio::kPIO0_11);
-  //reset_btn_input->SetResistorMode(io::ResistorMode::kPullUp);
-
-  io::IDigitalInput* raise_btn_input = teatotler.GetInput(McuPio::kPIO0_6);
-  //raise_btn_input->SetResistorMode(io::ResistorMode::kPullUp);
-
-  io::IDigitalInput* lower_btn_input = teatotler.GetInput(McuPio::kPIO0_23);
-  //lower_btn_input->SetResistorMode(io::ResistorMode::kPullUp);
-#endif
-
   sys::LinearDisplay* display = teatotler.GetDisplay();
   //sys::BasicHBridge* hbridge = teatotler.GetHBridge();
-  sys::PanelButtons* panel = teatotler.GetPanelButtons();
+  //sys::PanelButtons* panel = teatotler.GetPanelButtons();
+  sys::RotarySwitch* rotary_switch = teatotler.GetRotarySwitch();
 
   std::array<bool, 9> pixels = {false};
   uint32_t time = 0;
   //int i = 0;
+  int rotation = 0;
 
   while (1) {
     bool expired;
@@ -45,6 +35,29 @@ int main(void) {
 
     time++;
 
+    rotation += rotary_switch->GetRotation();
+    int pixel_limit = rotation;
+    if (pixel_limit > 9) { pixel_limit = 9; }
+    if (pixel_limit < 0) { pixel_limit = 0; }
+    int pixel ;
+    for (pixel = 0; pixel < pixel_limit; pixel++) { pixels[pixel] = true; }
+    for (pixel = pixel_limit; pixel < 9; pixel++) { pixels[pixel] = false; }
+
+#if 0
+    if (rotary_channel_a.GetValue() == mcu::io::Value::kLow) {
+      pixels[0] = true;
+    } else {
+      pixels[0] = false;
+    }
+
+    if (rotary_channel_b.GetValue() == mcu::io::Value::kLow) {
+      pixels[1] = true;
+    } else {
+      pixels[1] = false;
+    }
+#endif
+
+#if 0
     if (panel->CheckPressedButton() ==
         sys::PanelButtons::Button::kStart) {
       pixels[0] = true;
@@ -63,8 +76,7 @@ int main(void) {
       pixels[2] = false;
       pixels[3] = false;
     }
-
-    display->Update(pixels);
+#endif
 
 #if 0
     if ((time % 1000) == 0) {
@@ -87,6 +99,7 @@ int main(void) {
     }
 #endif
 
+    display->Update(pixels);
     teatotler.RunDrivers(time);
   }
 

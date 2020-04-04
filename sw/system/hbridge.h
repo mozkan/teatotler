@@ -11,7 +11,7 @@ class BasicHBridge : public util::PeriodicTask {
   BasicHBridge(uint32_t run_interval,
                mcu::io::IDigitalOutput* dir_a, mcu::io::IDigitalOutput* dir_b,
                mcu::io::IDigitalOutput* pwm_a, mcu::io::IDigitalOutput* pwm_b);
-  ~BasicHBridge() = default;
+  virtual ~BasicHBridge() = default;
 
   void DriveForward();
   void DriveReverse();

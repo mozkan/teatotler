@@ -28,7 +28,7 @@ class PanelButtons : public util::PeriodicTask {
                mcu::io::IDigitalInput* reset_button,
                mcu::io::IDigitalInput* raise_button,
                mcu::io::IDigitalInput* lower_button);
-  ~PanelButtons() = default;
+  virtual ~PanelButtons() = default;
 
   // Returns a Button representing one of the panel buttons in the pressed state
   // or kNone if no buttons are pressed.
