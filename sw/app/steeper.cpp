@@ -1,32 +1,47 @@
 #include "app/steeper.h"
 
-#include "system/teatotler.h"
-
 namespace application {
+
+using namespace steeper_internal;
 
 namespace {
 
 constexpr uint32_t kSteeperRunIntervalMs = 10;
 
+constexpr int kMillisecondsPerSteepTimeIncrement = 30;
+constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
+
 }  // namespace
 
 Steeper::Steeper(sys::Teatotler* teatotler)
     : PeriodicTask(kSteeperRunIntervalMs),
-      winch_drive_(teatotler->GetHBridge()),
-      time_indicator_(teatotler->GetDisplay()),
-      buttons_(teatotler->GetPanelButtons()),
-      knob_(teatotler->GetRotarySwitch()) {}
+      steep_parameters_(),
+      state_(SteepState::kSetSteepTime),
+      set_steep_time_state_(
+          &steep_parameters_,
+          teatotler->GetHBridge(),
+          teatotler->GetDisplay(),
+          teatotler->GetPanelButtons(),
+          teatotler->GetRotarySwitch()) {}
 
-void Steeper::DoRunIteration(uint32_t /*time_ms*/) {
-  rotation += knob_->GetRotation();
-  int pixel_limit = rotation;
-  if (pixel_limit > 9) { pixel_limit = 9; }
-  if (pixel_limit < 0) { pixel_limit = 0; }
-  int pixel ;
-  for (pixel = 0; pixel < pixel_limit; pixel++) { pixels[pixel] = true; }
-  for (pixel = pixel_limit; pixel < 9; pixel++) { pixels[pixel] = false; }
+void Steeper::DoRunIteration(uint32_t time_ms) {
+  switch (state_) {
+    case SteepState::kSetSteepTime:
+      state_ = set_steep_time_state_.Run(time_ms);
+    break;
 
-  time_indicator_->Update(pixels);
+    case SteepState::kSetDunkCount:
+      //state_ = set_dunk_count_state_.Run();
+    break;
+
+    case SteepState::kSteep:
+      //state_ = steep_state_.Run(time_ms);
+    break;
+
+    case SteepState ::kSteepComplete:
+      //state_ = steep_complete_state_.Run(time_ms);
+    break;
+  }
 }
 
 }  // namespace application

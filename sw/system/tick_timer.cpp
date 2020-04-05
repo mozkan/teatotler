@@ -5,6 +5,8 @@ namespace sys {
 TickTimer::TickTimer(mcu::IIntervalTimer* timer)
     : time_(0), timer_(timer), error_handler_([](){}) {}
 
+// TODO: Add statistics collection for how many iterations are done between
+// ticks.
 uint32_t TickTimer::WaitUntilNextTick() {
   if (timer_->TimerExpired()) {
     // If the timer has already expired we have missed our deadline.

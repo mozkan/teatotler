@@ -5,6 +5,7 @@
 
 #include <array>
 
+#include "app/steeper_internal.h"
 #include "system/hbridge.h"
 #include "system/display.h"
 #include "system/panel_buttons.h"
@@ -22,14 +23,13 @@ class Steeper : public util::PeriodicTask {
  private:
   void DoRunIteration(uint32_t time_ms) override;
 
-  sys::BasicHBridge* winch_drive_;
-  sys::LinearDisplay* time_indicator_;
-  sys::PanelButtons* buttons_;
-  sys::RotarySwitch* knob_;
+  steeper_internal::SteepParameters steep_parameters_;
+  steeper_internal::SteepState state_;
 
-  //std::array<bool, 9> time_points_ = {false};
-  std::array<bool, 9> pixels = {false};
-  int rotation = 0;
+  steeper_internal::SetSteepTime set_steep_time_state_;
+  //steeper_internal::SetDunkCount set_dunk_count_state_;
+  //steeper_internal::Steep steep_state_;
+  //steeper_internal::SteepComplete steep_complete_state_;
 };
 
 }  // namespace application
