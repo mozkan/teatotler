@@ -1,15 +1,16 @@
 #include "app/steeper.h"
+#include "system/hbridge.h"
+#include "system/display.h"
+#include "system/panel_buttons.h"
+#include "system/rotary_switch.h"
+
+using namespace application::steeper_internal;
 
 namespace application {
-
-using namespace steeper_internal;
 
 namespace {
 
 constexpr uint32_t kSteeperRunIntervalMs = 10;
-
-constexpr int kMillisecondsPerSteepTimeIncrement = 30;
-constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
 
 }  // namespace
 
@@ -22,6 +23,11 @@ Steeper::Steeper(sys::Teatotler* teatotler)
           teatotler->GetHBridge(),
           teatotler->GetDisplay(),
           teatotler->GetPanelButtons(),
+          teatotler->GetRotarySwitch()),
+      set_dunk_count_state_(
+          &steep_parameters_,
+          teatotler->GetDisplay(),
+          teatotler->GetPanelButtons(),
           teatotler->GetRotarySwitch()) {}
 
 void Steeper::DoRunIteration(uint32_t time_ms) {
@@ -31,7 +37,7 @@ void Steeper::DoRunIteration(uint32_t time_ms) {
     break;
 
     case SteepState::kSetDunkCount:
-      //state_ = set_dunk_count_state_.Run();
+      state_ = set_dunk_count_state_.Run(time_ms);
     break;
 
     case SteepState::kSteep:

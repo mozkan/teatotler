@@ -12,9 +12,13 @@ SetSteepTime::SetSteepTime(
     sys::RotarySwitch* knob)
     : parameters_(parameters), winch_drive_(winch_drive),
       time_indicator_(time_indicator), buttons_(buttons), knob_(knob),
-      steep_time_counts_(0) {}
+      steep_time_counts_() {
+  steep_time_counts_ =
+      parameters_->steep_time_ms / 1000 / kMillisecondsPerSteepTimeIncrement;
+}
 
 SteepState SetSteepTime::Run(uint32_t time_ms) {
+  // Stay in this state by default.
   SteepState next_state = SteepState::kSetSteepTime;
 
   ReadSteepTime();
@@ -40,27 +44,8 @@ SteepState SetSteepTime::Run(uint32_t time_ms) {
 void SetSteepTime::ReadSteepTime() {
   steep_time_counts_ += knob_->GetRotation();
 
-  // Saturate the value if there are more knob rotations than valid counts
-  // displayable on the indicator.
-  if (steep_time_counts_ > 9) {
-    steep_time_counts_ = 9;
-  } else if (steep_time_counts_ < 0) {
-    steep_time_counts_ = 0;
-  }
-
-  // Set the indicator's on pixels.
-  int steep_time_increment;
-  for (steep_time_increment = 0; steep_time_increment < steep_time_counts_;
-       steep_time_increment++) {
-    parameters_->steep_time_indication[steep_time_increment] = true;
-  }
-
-  // Clear the remaining pixels.
-  for (steep_time_increment = steep_time_counts_;
-       steep_time_increment < kMaxSteepTimeCounts;
-       steep_time_increment++) {
-    parameters_->steep_time_indication[steep_time_increment] = false;
-  }
+  UpdateDisplayParameters(&steep_time_counts_,
+                          &parameters_->steep_time_indication);
 
   time_indicator_->Update(parameters_->steep_time_indication);
 }

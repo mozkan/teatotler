@@ -6,10 +6,6 @@
 #include <array>
 
 #include "app/steeper_internal.h"
-#include "system/hbridge.h"
-#include "system/display.h"
-#include "system/panel_buttons.h"
-#include "system/rotary_switch.h"
 #include "system/teatotler.h"
 #include "util/periodic_task.h"
 
@@ -27,7 +23,7 @@ class Steeper : public util::PeriodicTask {
   steeper_internal::SteepState state_;
 
   steeper_internal::SetSteepTime set_steep_time_state_;
-  //steeper_internal::SetDunkCount set_dunk_count_state_;
+  steeper_internal::SetDunkCount set_dunk_count_state_;
   //steeper_internal::Steep steep_state_;
   //steeper_internal::SteepComplete steep_complete_state_;
 };

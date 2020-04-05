@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include <array>
+
 #include "system/teatotler.h"
 
 namespace application {
@@ -36,6 +38,11 @@ struct SteepParameters {
   std::array<bool, 9> steep_time_indication = {false};
 };
 
+// Updates a given pixel buffer with a raw set of rotary knob counts. Saturates
+// the rotation if it goes outside of the displayable range.
+void UpdateDisplayParameters(
+    int* knob_rotation, std::array<bool, kMaxSteepTimeCounts>* buffer);
+
 class SetSteepTime {
  public:
   SetSteepTime(SteepParameters* parameters,
@@ -60,10 +67,11 @@ class SetSteepTime {
 
   int steep_time_counts_;
 };
-#if 0
+
 class SetDunkCount {
  public:
-  SetDunkCount(sys::LinearDisplay* time_indicator,
+  SetDunkCount(SteepParameters* parameters,
+               sys::LinearDisplay* time_indicator,
                sys::PanelButtons* buttons,
                sys::RotarySwitch* knob);
   ~SetDunkCount() = default;
@@ -71,14 +79,21 @@ class SetDunkCount {
   SteepState Run(uint32_t time_ms);
 
  private:
+  void UpdateDisplay(uint32_t time_ms);
+
+  SteepParameters* parameters_;
+
   sys::LinearDisplay* time_indicator_;
   sys::PanelButtons* buttons_;
   sys::RotarySwitch* knob_;
+
+  uint8_t toggle_blink_;
 };
 
 class Steep {
  public:
-  Steep(sys::BasicHBridge* winch_drive,
+  Steep(SteepParameters* parameters,
+        sys::BasicHBridge* winch_drive,
         sys::LinearDisplay* time_indicator,
         sys::PanelButtons* buttons);
   ~Steep() = default;
@@ -86,19 +101,23 @@ class Steep {
   SteepState Run(uint32_t time_ms);
 
  private:
+  SteepParameters* parameters_;
+
   sys::BasicHBridge* winch_drive_;
   sys::LinearDisplay* time_indicator_;
   sys::PanelButtons* buttons_;
 };
-
+#if 0
 class SteepComplete {
  public:
-  SteepComplete(sys::BasicHBridge* winch_drive);
+  SteepComplete(SteepParameters* parameters,
+                sys::BasicHBridge* winch_drive);
   ~SteepComplete() = default;
 
   SteepState Run(uint32_t time_ms);
 
  private:
+  SteepParameters* parameters_;
   sys::BasicHBridge* winch_drive_;
 };
 #endif
