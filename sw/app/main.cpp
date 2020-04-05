@@ -1,31 +1,24 @@
-#include <cr_section_macros.h>
-
-#include <array>
-
 #include "app/steeper.h"
-#include "mcu/digital_io.h"
-#include "mcu/interval_timer.h"
 #include "mcu/mcu.h"
-#include "mcu/pins.h"
-#include "system/debounced_input.h"
-#include "system/display.h"
-#include "system/hbridge.h"
-#include "system/panel_buttons.h"
-#include "system/rotary_switch.h"
 #include "system/teatotler.h"
 
 int main(void) {
-  sys::Teatotler teatotler;
+  mcu::Mcu mcu;
+  sys::Teatotler teatotler(&mcu);
   application::Steeper steeper(&teatotler);
 
+  sys::TickTimer* tick_timer = teatotler.GetTickTimer();
   uint32_t time = 0;
 
   while (1) {
-    bool expired;
-    teatotler.WaitUntilNextTick(&expired);
-    (void)expired; // Temporary.
+    time = tick_timer->WaitUntilNextTick();
 
-    time++;
+    teatotler.RunDrivers(time);
+    steeper.Run(time);
+  }
+
+  return 0;
+}
 
 #if 0
     if (panel->CheckPressedButton() ==
@@ -46,13 +39,6 @@ int main(void) {
       pixels[2] = false;
       pixels[3] = false;
     }
+
+    display->Update(pixels);
 #endif
-
-    //display->Update(pixels);
-
-    teatotler.RunDrivers(time);
-    steeper.Run(time);
-  }
-
-  return 0;
-}
