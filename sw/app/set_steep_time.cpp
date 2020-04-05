@@ -13,8 +13,7 @@ SetSteepTime::SetSteepTime(
     : parameters_(parameters), winch_drive_(winch_drive),
       time_indicator_(time_indicator), buttons_(buttons), knob_(knob),
       steep_time_counts_() {
-  steep_time_counts_ =
-      parameters_->steep_time_ms / 1000 / kMillisecondsPerSteepTimeIncrement;
+  steep_time_counts_ = MillisecondsToSteepCounts(parameters_->steep_time_ms);
 }
 
 SteepState SetSteepTime::Run(uint32_t time_ms) {
@@ -29,8 +28,7 @@ SteepState SetSteepTime::Run(uint32_t time_ms) {
   }
 
   if (buttons_->CheckPressedButton() == sys::PanelButtons::Button::kStart) {
-    parameters_->steep_time_ms =
-        steep_time_counts_ * 1000 * kMillisecondsPerSteepTimeIncrement;
+    parameters_->steep_time_ms = SteepCountsToMilliseconds(steep_time_counts_);
     parameters_->steep_start_time_ms = time_ms;
 
     next_state = SteepState::kSteep;

@@ -16,6 +16,10 @@ constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
 constexpr uint32_t kBagLowerDurationMs = 1000;
 constexpr uint32_t kBagRaiseDurationMs = kBagLowerDurationMs;
 
+constexpr std::array<bool, kMaxSteepTimeCounts> kBlankDisplay {{
+  false, false, false, false, false, false, false, false, false
+}};
+
 enum class SteepState {
   kSetSteepTime,
   kSetDunkCount,
@@ -42,6 +46,11 @@ struct SteepParameters {
 // the rotation if it goes outside of the displayable range.
 void UpdateDisplayParameters(
     int* knob_rotation, std::array<bool, kMaxSteepTimeCounts>* buffer);
+
+// Conversion functions to go to and from steep counts shown on the display and
+// milliseconds.
+uint32_t SteepCountsToMilliseconds(int counts);
+int MillisecondsToSteepCounts(uint32_t steep_time_ms);
 
 class SetSteepTime {
  public:
@@ -101,26 +110,34 @@ class Steep {
   SteepState Run(uint32_t time_ms);
 
  private:
+  enum class State {
+    kStartSteep,
+    kSteeping,
+    kLowerTeabag,
+    kRaiseTeabag,
+    kSteepComplete
+  };
+
+  void StartSteep(uint32_t time_ms);
+  void ExecuteSteep(uint32_t time_ms);
+  void LowerTeabag(uint32_t time_ms);
+  void RaiseTeabag(uint32_t time_ms);
+  void UpdateDisplay(uint32_t time_ms);
+
   SteepParameters* parameters_;
 
   sys::BasicHBridge* winch_drive_;
   sys::LinearDisplay* time_indicator_;
   sys::PanelButtons* buttons_;
-};
-#if 0
-class SteepComplete {
- public:
-  SteepComplete(SteepParameters* parameters,
-                sys::BasicHBridge* winch_drive);
-  ~SteepComplete() = default;
 
-  SteepState Run(uint32_t time_ms);
+  State state_;
+  State next_state_;
 
- private:
-  SteepParameters* parameters_;
-  sys::BasicHBridge* winch_drive_;
+  uint32_t time_between_dunks_ms_;
+  uint32_t dunk_start_ms_;
+  uint8_t toggle_blink_;
 };
-#endif
+
 }  // namespace steeper_internal
 }  // namespace application
 

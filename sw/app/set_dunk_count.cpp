@@ -10,10 +10,6 @@ namespace {
 
 constexpr int kBlinkPeriodMs = 500;
 
-constexpr std::array<bool, kMaxSteepTimeCounts> kBlankDisplay {{
-  false, false, false, false, false, false, false, false, false
-}};
-
 }  // namespace
 
 SetDunkCount::SetDunkCount(
