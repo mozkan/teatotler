@@ -34,8 +34,8 @@ SteepState SetDunkCount::Run(uint32_t time_ms) {
 void SetDunkCount::UpdateDisplay(uint32_t time_ms) {
   parameters_->dunk_count += knob_->GetRotation();
 
-  UpdateDisplayParameters(&parameters_->dunk_count,
-                          &parameters_->steep_time_indication);
+  UpdateDisplayWholeCounts(&parameters_->dunk_count,
+                           &parameters_->steep_time_indication);
 
   if ((time_ms % kBlinkPeriodMs) == 0) {
     toggle_blink_++;

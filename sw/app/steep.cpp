@@ -101,9 +101,8 @@ void Steep::UpdateDisplay(uint32_t time_ms) {
   int steep_time_display_counts =
       MillisecondsToSteepCounts(steep_time_remaining);
 
-  UpdateDisplayParameters(
-      &steep_time_display_counts,
-      &parameters_->steep_time_indication);
+  UpdateDisplayTime(
+      &steep_time_display_counts, &parameters_->steep_time_indication);
 
   if ((time_ms % kBlinkPeriodMs) == 0) {
     toggle_blink_++;

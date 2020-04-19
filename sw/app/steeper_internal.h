@@ -5,6 +5,7 @@
 
 #include <array>
 
+#include "system/display.h"
 #include "system/teatotler.h"
 
 namespace application {
@@ -16,6 +17,7 @@ constexpr int kSecondsPerSteepTimeIncrement = 30;
 constexpr int kDisplayTimeStartingOffsetMs = 60000;
 
 constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
+constexpr int kMaxWholeNumberCounts = (sys::LinearDisplay::kPixelCount + 1) / 2;
 
 constexpr uint32_t kBagLowerDurationMs = 2000;
 constexpr uint32_t kBagRaiseDurationMs = 2200;
@@ -47,9 +49,16 @@ struct SteepParameters {
 };
 
 // Updates a given pixel buffer with a raw set of rotary knob counts. Saturates
-// the rotation if it goes outside of the displayable range.
-void UpdateDisplayParameters(
+// the rotation if it goes outside of the displayable range. Knob counts
+// correspond to 30 second increments on the silkscreen.
+void UpdateDisplayTime(
     int* knob_rotation, std::array<bool, kMaxSteepTimeCounts>* buffer);
+
+// Updates only the pixels corresponding to the whole counts on the front panel.
+// Knob rotations corespond directly to the values "1", "2", "3", etc. on the
+// silkscreen with the pixels in between them being skipped.
+void UpdateDisplayWholeCounts(
+  int* knob_rotation, std::array<bool, kMaxSteepTimeCounts>* buffer);
 
 // Conversion functions to go to and from steep counts shown on the display and
 // milliseconds.

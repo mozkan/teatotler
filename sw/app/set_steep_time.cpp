@@ -71,8 +71,7 @@ SteepState SetSteepTime::LowerTeabag(uint32_t time_ms) {
 void SetSteepTime::ReadSteepTime() {
   steep_time_counts_ += knob_->GetRotation();
 
-  UpdateDisplayParameters(&steep_time_counts_,
-                          &parameters_->steep_time_indication);
+  UpdateDisplayTime(&steep_time_counts_, &parameters_->steep_time_indication);
 
   time_indicator_->Update(parameters_->steep_time_indication);
 }
