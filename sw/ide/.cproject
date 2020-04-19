@@ -49,6 +49,7 @@
 								<option id="gnu.cpp.compiler.option.warnings.wconversion.854107156" name="Implicit conversion warnings (-Wconversion)" superClass="gnu.cpp.compiler.option.warnings.wconversion" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.cpp.lto.1405771118" name="Enable Link-time optimization (-flto)" superClass="com.crt.advproject.cpp.lto" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="com.crt.advproject.cpp.lto.fat.1889531400" name="Fat lto objects (-ffat-lto-objects)" superClass="com.crt.advproject.cpp.lto.fat" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="com.crt.advproject.cpp.misc.dialect.1548570036" superClass="com.crt.advproject.cpp.misc.dialect" useByScannerDiscovery="true" value="com.crt.advproject.misc.dialect.cpp14" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.compiler.cpp.input.1155066731" superClass="com.crt.advproject.compiler.cpp.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.exe.debug.1228578292" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug">
