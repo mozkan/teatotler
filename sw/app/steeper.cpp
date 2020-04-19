@@ -33,7 +33,10 @@ Steeper::Steeper(sys::Teatotler* teatotler)
           &steep_parameters_,
           teatotler->GetHBridge(),
           teatotler->GetDisplay(),
-          teatotler->GetPanelButtons()) {}
+          teatotler->GetPanelButtons()),
+      steep_complete_state_(
+          teatotler->GetDisplay(),
+          teatotler->GetHBridge()) {}
 
 void Steeper::DoRunIteration(uint32_t time_ms) {
   switch (state_) {
@@ -50,8 +53,7 @@ void Steeper::DoRunIteration(uint32_t time_ms) {
     break;
 
     case SteepState ::kSteepComplete:
-      // TODO: Write steep settings to non-volatile memory and sleep via a
-      // fourth state class.
+      state_ = steep_complete_state_.Run(time_ms);
     break;
   }
 }

@@ -26,11 +26,11 @@ SteepState Steep::Run(uint32_t time_ms) {
 
   switch (state_) {
     case State::kStartSteep:
-      StartSteep(time_ms);
+      StartSteep();
     break;
 
     case State::kSteeping:
-      ExecuteSteep(time_ms);
+      Steeping(time_ms);
     break;
 
     case State::kLowerTeabag:
@@ -51,21 +51,17 @@ SteepState Steep::Run(uint32_t time_ms) {
   return next_state;
 }
 
-void Steep::StartSteep(uint32_t time_ms) {
+void Steep::StartSteep() {
   time_between_dunks_ms_ =
       static_cast<uint32_t>(parameters_->steep_time_ms /
                             parameters_->dunk_count);
-  dunk_start_ms_ = time_ms;
-  state_ = State::kLowerTeabag;
-  next_state_ = State::kSteeping;
+  state_ = State::kSteeping;
 }
 
-void Steep::ExecuteSteep(uint32_t time_ms) {
+void Steep::Steeping(uint32_t time_ms) {
   if (time_ms > static_cast<uint32_t>(parameters_->steep_start_time_ms +
                                       parameters_->steep_time_ms)) {
-    dunk_start_ms_ = time_ms;
-    state_ = State::kRaiseTeabag;
-    next_state_ = State::kSteepComplete;
+    state_ = State::kSteepComplete;
   }
 }
 

@@ -13,7 +13,7 @@ namespace steeper_internal {
 constexpr int kMillisecondsPerSteepTimeIncrement = 30;
 constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
 
-constexpr uint32_t kBagLowerDurationMs = 1000;
+constexpr uint32_t kBagLowerDurationMs = 2000;
 constexpr uint32_t kBagRaiseDurationMs = kBagLowerDurationMs;
 
 constexpr std::array<bool, kMaxSteepTimeCounts> kBlankDisplay {{
@@ -64,10 +64,19 @@ class SetSteepTime {
   SteepState Run(uint32_t time_ms);
 
  private:
+  enum class State {
+    kReadUserInput,
+    kLowerTeabag,
+  };
+
+  SteepState ReadUserInput(uint32_t time_ms);
+  SteepState LowerTeabag(uint32_t time_ms);
   void ReadSteepTime();
   void DriveWinchWithButtons();
 
   SteepParameters* parameters_;
+
+  State state_;
 
   sys::BasicHBridge* winch_drive_;
   sys::LinearDisplay* time_indicator_;
@@ -75,6 +84,7 @@ class SetSteepTime {
   sys::RotarySwitch* knob_;
 
   int steep_time_counts_;
+  uint32_t bag_lower_start_ms_;
 };
 
 class SetDunkCount {
@@ -118,8 +128,8 @@ class Steep {
     kSteepComplete
   };
 
-  void StartSteep(uint32_t time_ms);
-  void ExecuteSteep(uint32_t time_ms);
+  void StartSteep();
+  void Steeping(uint32_t time_ms);
   void LowerTeabag(uint32_t time_ms);
   void RaiseTeabag(uint32_t time_ms);
   void UpdateDisplay(uint32_t time_ms);
@@ -135,6 +145,37 @@ class Steep {
 
   uint32_t time_between_dunks_ms_;
   uint32_t dunk_start_ms_;
+  uint8_t toggle_blink_;
+};
+
+class SteepComplete {
+ public:
+  SteepComplete(
+      sys::LinearDisplay* time_indicator, sys::BasicHBridge* winch_drive);
+  ~SteepComplete() = default;
+
+  SteepState Run(uint32_t time_ms);
+
+ private:
+  enum class State {
+    kStart,
+    kRaiseTeabag,
+    kBlink,
+    kEnd,
+  };
+
+  void Start(uint32_t time_ms);
+  void RaiseTeabag(uint32_t time_ms);
+  void Blink(uint32_t time_ms);
+  void End();
+
+  State state_;
+
+  sys::LinearDisplay* time_indicator_;
+  sys::BasicHBridge* winch_drive_;
+
+  uint32_t raise_start_ms_;
+  uint32_t blink_start_ms_;
   uint8_t toggle_blink_;
 };
 

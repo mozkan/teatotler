@@ -25,6 +25,7 @@ class Steeper : public util::PeriodicTask {
   steeper_internal::SetSteepTime set_steep_time_state_;
   steeper_internal::SetDunkCount set_dunk_count_state_;
   steeper_internal::Steep steep_state_;
+  steeper_internal::SteepComplete steep_complete_state_;
 };
 
 }  // namespace application
