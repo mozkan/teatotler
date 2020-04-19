@@ -18,7 +18,7 @@ constexpr int kDisplayTimeStartingOffsetMs = 60000;
 constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
 
 constexpr uint32_t kBagLowerDurationMs = 2000;
-constexpr uint32_t kDunkLowerDurationMs = 1250;
+constexpr uint32_t kBagRaiseDurationMs = 2200;
 
 constexpr std::array<bool, kMaxSteepTimeCounts> kBlankDisplay {{
   false, false, false, false, false, false, false, false, false
@@ -127,15 +127,15 @@ class Steep {
   enum class State {
     kStartSteep,
     kSteeping,
-    kLowerTeabag,
-    kRaiseTeabag,
+    kDunkTeabagDown,
+    kDunkTeabagUp,
     kSteepComplete
   };
 
-  void StartSteep();
+  void StartSteep(uint32_t time_ms);
   void Steeping(uint32_t time_ms);
-  void LowerTeabag(uint32_t time_ms);
-  void RaiseTeabag(uint32_t time_ms);
+  void DunkTeabagDown(uint32_t time_ms);
+  void DunkTeabagUp(uint32_t time_ms);
   void UpdateDisplay(uint32_t time_ms);
 
   SteepParameters* parameters_;
@@ -145,10 +145,11 @@ class Steep {
   sys::PanelButtons* buttons_;
 
   State state_;
-  State next_state_;
 
   uint32_t time_between_dunks_ms_;
   uint32_t dunk_start_ms_;
+  uint32_t dunk_interval_end_ms_;
+  int dunks_remaining_;
   uint8_t toggle_blink_;
 };
 

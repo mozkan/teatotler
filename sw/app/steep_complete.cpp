@@ -56,7 +56,7 @@ void SteepComplete::Start(uint32_t time_ms) {
 void SteepComplete::RaiseTeabag(uint32_t time_ms) {
   winch_drive_->DriveForward();
 
-  if (time_ms > (raise_start_ms_ + kBagLowerDurationMs)) {
+  if (time_ms > (raise_start_ms_ + kBagRaiseDurationMs)) {
     winch_drive_->Stop();
     blink_start_ms_ = time_ms;
     state_ = State::kBlink;
