@@ -33,11 +33,12 @@ void UpdateDisplayParameters(
 }
 
 uint32_t SteepCountsToMilliseconds(int counts) {
-  return counts * 1000 * kMillisecondsPerSteepTimeIncrement;
+  return ((counts - 1) * 1000 * kSecondsPerSteepTimeIncrement) +
+         kDisplayTimeStartingOffsetMs;
 }
 
 int MillisecondsToSteepCounts(uint32_t steep_time_ms) {
-  return steep_time_ms / 1000 / kMillisecondsPerSteepTimeIncrement;
+  return steep_time_ms / 1000 / kSecondsPerSteepTimeIncrement;
 }
 
 }  // namespace steeper_internal

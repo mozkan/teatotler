@@ -75,7 +75,7 @@ void Steep::LowerTeabag(uint32_t time_ms) {
 
 void Steep::RaiseTeabag(uint32_t time_ms) {
   winch_drive_->DriveForward();
-  if (time_ms  > (dunk_start_ms_ + kBagRaiseDurationMs)) {
+  if (time_ms  > (dunk_start_ms_ + kBagLowerDurationMs)) {
     winch_drive_->Stop();
     state_ = next_state_;
   }

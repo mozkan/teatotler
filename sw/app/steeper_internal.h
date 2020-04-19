@@ -10,11 +10,15 @@
 namespace application {
 namespace steeper_internal {
 
-constexpr int kMillisecondsPerSteepTimeIncrement = 30;
+constexpr int kSecondsPerSteepTimeIncrement = 30;
+
+// The starting offset on the display in milliseconds.
+constexpr int kDisplayTimeStartingOffsetMs = 60000;
+
 constexpr int kMaxSteepTimeCounts = sys::LinearDisplay::kPixelCount;
 
 constexpr uint32_t kBagLowerDurationMs = 2000;
-constexpr uint32_t kBagRaiseDurationMs = kBagLowerDurationMs;
+constexpr uint32_t kDunkLowerDurationMs = 1250;
 
 constexpr std::array<bool, kMaxSteepTimeCounts> kBlankDisplay {{
   false, false, false, false, false, false, false, false, false
